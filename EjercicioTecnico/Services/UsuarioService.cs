@@ -1,5 +1,6 @@
 ﻿using EjercicioTecnico.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EjercicioTecnico.Services
@@ -60,6 +61,30 @@ namespace EjercicioTecnico.Services
             }
         }
 
+
+        public ActionResult<Usuario> GetByIdUsuario(int id)
+        {
+            try
+            {
+                Usuario usuarioEncontrado = usuarios.FirstOrDefault( usuario => usuario.Id == id);
+
+                if (usuarioEncontrado == null ) { 
+                    return NotFound(new
+                    {
+                        mensaje = "Error al buscar usuario "
+                    });
+                }
+                return Ok(usuarioEncontrado);
+            } 
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                { 
+                    mensaje = $"Error del servidor: {e.Message}"  
+                });
+            }
         
+        }
+
     }
 }
