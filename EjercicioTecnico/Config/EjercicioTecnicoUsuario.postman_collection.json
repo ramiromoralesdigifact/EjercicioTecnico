@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "fb90b305-9fca-4d1b-954f-742dfd8931bd",
+		"name": "EjercicioTecnicoUsuario",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41959681"
+	},
+	"item": [
+		{
+			"name": "AgregarUsuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Ramiro\",\r\n  \"apellido\": \"Morales\",\r\n  \"fechaNacimiento\": \"2025-08-21T16:42:15.944Z\",\r\n  \"nit\": \"012345678\",\r\n  \"dpi\": \"1234567891234\",\r\n  \"correo\": \"digifact@gmail.com\",\r\n  \"telefono\": \"01010101\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/Usuarios",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"Usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarUsuario",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Ramiro\",\r\n  \"apellido\": \"Morales\",\r\n  \"fechaNacimiento\": \"2025-08-21T16:42:15.944Z\",\r\n  \"nit\": \"012345678\",\r\n  \"dpi\": \"1234567891234\",\r\n  \"correo\": \"digifact@gmail.com\",\r\n  \"telefono\": \"01010101\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/Usuarios",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"Usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActualizarUsuario",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"nombre\": \"Dana \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/Usuarios/2",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"Usuarios",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuscarUsuario",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Ramiro\",\r\n  \"apellido\": \"Morales\",\r\n  \"fechaNacimiento\": \"2025-08-21T16:42:15.944Z\",\r\n  \"nit\": \"012345678\",\r\n  \"dpi\": \"1234567891234\",\r\n  \"correo\": \"digifact@gmail.com\",\r\n  \"telefono\": \"01010101\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/Usuarios/2",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"Usuarios",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarUsuario",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/Usuarios/2",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"Usuarios",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

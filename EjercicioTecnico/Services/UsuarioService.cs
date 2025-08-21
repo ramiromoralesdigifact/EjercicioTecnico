@@ -1,6 +1,8 @@
 ﻿using EjercicioTecnico.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace EjercicioTecnico.Services
 {
@@ -24,9 +26,9 @@ namespace EjercicioTecnico.Services
             }
             catch (Exception e)
             {
-                return StatusCode(500, new 
-                { 
-                    mensaje = $"Error del servidor: {e.Message}" 
+                return StatusCode(500, new
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
                 });
             }
         }
@@ -37,7 +39,7 @@ namespace EjercicioTecnico.Services
             {
                 int CantidadAntes = usuarios.Count;
 
-                data.Id = CantidadAntes + 1;
+                data.Id = Guid.NewGuid();
 
                 usuarios.Add(data);
 
@@ -46,12 +48,12 @@ namespace EjercicioTecnico.Services
                     return Ok(data);
                 }
 
-                return BadRequest( new
-                { 
+                return BadRequest(new
+                {
                     mensaje = "Error al añadir nuevo usuario"
                 });
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 return StatusCode(500, new
                 {
@@ -60,6 +62,99 @@ namespace EjercicioTecnico.Services
             }
         }
 
-        
+
+        public ActionResult<Usuario> GetByIdUsuario(Guid id)
+        {
+            try
+            {
+                Usuario usuarioEncontrado = usuarios.FirstOrDefault(usuario => usuario.Id.Equals(id));
+
+                if (usuarioEncontrado == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "Error al buscar usuario "
+                    });
+                }
+                return Ok(usuarioEncontrado);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
+                });
+            }
+
+        }
+
+        public ActionResult<Usuario> DeleteUsuario(Guid id)
+        {
+            try
+            {
+                Usuario usuarioEliminar = usuarios.FirstOrDefault(usuario => usuario.Id.Equals(id));
+
+                if (usuarioEliminar == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "Error al encontrar al usuario "
+                    });
+                }
+
+                bool eliminado = usuarios.Remove(usuarioEliminar);
+
+                if (eliminado)
+                {
+                    return Ok(new { mensaje = "El usuario ah sido removido con exito" });
+                }
+
+                return BadRequest(new { mensaje = "Error al remover el usuario" });
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
+                });
+            }
+        }
+
+        public ActionResult<Usuario> UpdateUsuario(Guid id, Usuario data) 
+        {
+            try
+            {
+                Usuario usuarioEditar = usuarios.FirstOrDefault(usuario => usuario.Id.Equals(id));
+
+                if (usuarioEditar == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "Error al encontrar al usuario "
+                    });
+                }
+
+                if (data.Nombre != null) usuarioEditar.Nombre = data.Nombre;
+                if (data.Apellido != null) usuarioEditar.Apellido = data.Apellido;
+                if (data.FechaNacimiento != null) usuarioEditar.FechaNacimiento = data.FechaNacimiento;
+                if (data.NIT != null) usuarioEditar.NIT = data.NIT;
+                if (data.DPI != null) usuarioEditar.DPI = data.DPI;
+                if (data.Correo != null) usuarioEditar.Correo = data.Correo;
+                if (data.Telefono != null) usuarioEditar.Telefono = data.Telefono;
+                if (data.Intereses != null) usuarioEditar.Intereses = data.Intereses;
+
+                return Ok(new { mensaje = "Usuario actualizado correctamente", usuarioEditar });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
+                });
+            }
+        }
+
+
     }
 }
