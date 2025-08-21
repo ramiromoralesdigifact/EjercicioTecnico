@@ -7,7 +7,7 @@ namespace EjercicioTecnico.Controllers
 {
     [ApiController]
     [Route("/Usuarios")]
-    public class UsuarioController : Controller
+    public class UsuarioController : ControllerBase
     {
 
         private readonly UsuarioService _usuarioService;
@@ -54,9 +54,35 @@ namespace EjercicioTecnico.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { });
+                return StatusCode(500, new { mensaje = $"Error del servidor: {e.Message}" });
             }
         
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Usuario> DeleteUsuario([FromRoute] int id) {
+            try
+            {
+                return _usuarioService.DeleteUsuario(id);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { mensaje = $"Error del servidor: {e.Message}" });
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public ActionResult<Usuario> UpdateUsuario([FromRoute] int id, [FromBody] Usuario data)
+        {
+            try
+            {
+                return _usuarioService.UpdateUsuario(id, data);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { mensaje = $"Error del servidor: {e.Message}" });
+            }
+
         }
     }
 
