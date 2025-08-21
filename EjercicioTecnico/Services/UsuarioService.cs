@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace EjercicioTecnico.Services
 {
@@ -38,7 +39,7 @@ namespace EjercicioTecnico.Services
             {
                 int CantidadAntes = usuarios.Count;
 
-                data.Id = CantidadAntes + 1;
+                data.Id = Guid.NewGuid();
 
                 usuarios.Add(data);
 
@@ -62,11 +63,11 @@ namespace EjercicioTecnico.Services
         }
 
 
-        public ActionResult<Usuario> GetByIdUsuario(int id)
+        public ActionResult<Usuario> GetByIdUsuario(Guid id)
         {
             try
             {
-                Usuario usuarioEncontrado = usuarios.FirstOrDefault(usuario => usuario.Id == id);
+                Usuario usuarioEncontrado = usuarios.FirstOrDefault(usuario => usuario.Id.Equals(id));
 
                 if (usuarioEncontrado == null)
                 {
@@ -87,11 +88,11 @@ namespace EjercicioTecnico.Services
 
         }
 
-        public ActionResult<Usuario> DeleteUsuario(int id)
+        public ActionResult<Usuario> DeleteUsuario(Guid id)
         {
             try
             {
-                Usuario usuarioEliminar = usuarios.FirstOrDefault(usuario => usuario.Id == id);
+                Usuario usuarioEliminar = usuarios.FirstOrDefault(usuario => usuario.Id.Equals(id));
 
                 if (usuarioEliminar == null)
                 {
@@ -120,11 +121,11 @@ namespace EjercicioTecnico.Services
             }
         }
 
-        public ActionResult<Usuario> UpdateUsuario(int id, Usuario data) 
+        public ActionResult<Usuario> UpdateUsuario(Guid id, Usuario data) 
         {
             try
             {
-                Usuario usuarioEditar = usuarios.FirstOrDefault(usuario => usuario.Id == id);
+                Usuario usuarioEditar = usuarios.FirstOrDefault(usuario => usuario.Id.Equals(id));
 
                 if (usuarioEditar == null)
                 {

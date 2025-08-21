@@ -1,7 +1,9 @@
-﻿using EjercicioTecnico.Models;
+﻿using EjercicioTecnico.Middleware;
+using EjercicioTecnico.Models;
 using EjercicioTecnico.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation.Results;
 
 namespace EjercicioTecnico.Controllers
 {
@@ -9,6 +11,7 @@ namespace EjercicioTecnico.Controllers
     [Route("/Usuarios")]
     public class UsuarioController : ControllerBase
     {
+        UsuarioValidator validator = new UsuarioValidator();
 
         private readonly UsuarioService _usuarioService;
 
@@ -37,6 +40,23 @@ namespace EjercicioTecnico.Controllers
         public ActionResult<Usuario> PostUsuario([FromBody] Usuario data) {
             try
             {
+                ValidationResult results = validator.Validate(data);
+
+                if (!results.IsValid)
+                {
+                    var errores = results.Errors.Select(error => new
+                    {
+                        Campo = error.PropertyName,
+                        Mensaje = error.ErrorMessage
+                    });
+
+                    return BadRequest(new
+                    {
+                        mensaje = "Error de validación",
+                        errores = errores
+                    });
+                }
+
                 return _usuarioService.AddUsuario(data);
             }
             catch (Exception e)
@@ -47,7 +67,7 @@ namespace EjercicioTecnico.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Usuario> GetIdUsuario([FromRoute] int id) {
+        public ActionResult<Usuario> GetIdUsuario([FromRoute] Guid id) {
             try
             {
                 return _usuarioService.GetByIdUsuario(id);
@@ -60,7 +80,7 @@ namespace EjercicioTecnico.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Usuario> DeleteUsuario([FromRoute] int id) {
+        public ActionResult<Usuario> DeleteUsuario([FromRoute] Guid id) {
             try
             {
                 return _usuarioService.DeleteUsuario(id);
@@ -72,7 +92,7 @@ namespace EjercicioTecnico.Controllers
         }
 
         [HttpPatch("{id}")]
-        public ActionResult<Usuario> UpdateUsuario([FromRoute] int id, [FromBody] Usuario data)
+        public ActionResult<Usuario> UpdateUsuario([FromRoute] Guid id, [FromBody] Usuario data)
         {
             try
             {
