@@ -25,9 +25,9 @@ namespace EjercicioTecnico.Services
             }
             catch (Exception e)
             {
-                return StatusCode(500, new 
-                { 
-                    mensaje = $"Error del servidor: {e.Message}" 
+                return StatusCode(500, new
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
                 });
             }
         }
@@ -47,12 +47,12 @@ namespace EjercicioTecnico.Services
                     return Ok(data);
                 }
 
-                return BadRequest( new
-                { 
+                return BadRequest(new
+                {
                     mensaje = "Error al añadir nuevo usuario"
                 });
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 return StatusCode(500, new
                 {
@@ -66,24 +66,25 @@ namespace EjercicioTecnico.Services
         {
             try
             {
-                Usuario usuarioEncontrado = usuarios.FirstOrDefault( usuario => usuario.Id == id);
+                Usuario usuarioEncontrado = usuarios.FirstOrDefault(usuario => usuario.Id == id);
 
-                if (usuarioEncontrado == null ) { 
+                if (usuarioEncontrado == null)
+                {
                     return NotFound(new
                     {
                         mensaje = "Error al buscar usuario "
                     });
                 }
                 return Ok(usuarioEncontrado);
-            } 
+            }
             catch (Exception e)
             {
                 return StatusCode(500, new
-                { 
-                    mensaje = $"Error del servidor: {e.Message}"  
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
                 });
             }
-        
+
         }
 
         public ActionResult<Usuario> DeleteUsuario(int id)
@@ -114,7 +115,41 @@ namespace EjercicioTecnico.Services
             {
                 return StatusCode(500, new
                 {
-                    mensaje  = $"Error del servidor: {e.Message}"
+                    mensaje = $"Error del servidor: {e.Message}"
+                });
+            }
+        }
+
+        public ActionResult<Usuario> UpdateUsuario(int id, Usuario data) 
+        {
+            try
+            {
+                Usuario usuarioEditar = usuarios.FirstOrDefault(usuario => usuario.Id == id);
+
+                if (usuarioEditar == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "Error al encontrar al usuario "
+                    });
+                }
+
+                if (data.Nombre != null) usuarioEditar.Nombre = data.Nombre;
+                if (data.Apellido != null) usuarioEditar.Apellido = data.Apellido;
+                if (data.FechaNacimiento != null) usuarioEditar.FechaNacimiento = data.FechaNacimiento;
+                if (data.NIT != null) usuarioEditar.NIT = data.NIT;
+                if (data.DPI != null) usuarioEditar.DPI = data.DPI;
+                if (data.Correo != null) usuarioEditar.Correo = data.Correo;
+                if (data.Telefono != null) usuarioEditar.Telefono = data.Telefono;
+                if (data.Intereses != null) usuarioEditar.Intereses = data.Intereses;
+
+                return Ok(new { mensaje = "Usuario actualizado correctamente", usuarioEditar });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = $"Error del servidor: {e.Message}"
                 });
             }
         }
