@@ -86,5 +86,39 @@ namespace EjercicioTecnico.Services
         
         }
 
+        public ActionResult<Usuario> DeleteUsuario(int id)
+        {
+            try
+            {
+                Usuario usuarioEliminar = usuarios.FirstOrDefault(usuario => usuario.Id == id);
+
+                if (usuarioEliminar == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "Error al encontrar al usuario "
+                    });
+                }
+
+                bool eliminado = usuarios.Remove(usuarioEliminar);
+
+                if (eliminado)
+                {
+                    return Ok(new { mensaje = "El usuario ah sido removido con exito" });
+                }
+
+                return BadRequest(new { mensaje = "Error al remover el usuario" });
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje  = $"Error del servidor: {e.Message}"
+                });
+            }
+        }
+
+
     }
 }
