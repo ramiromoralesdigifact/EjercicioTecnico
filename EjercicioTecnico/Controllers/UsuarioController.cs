@@ -45,6 +45,19 @@ namespace EjercicioTecnico.Controllers
             }
 
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<Usuario> GetIdUsuario([FromRoute] int id) {
+            try
+            {
+                return _usuarioService.GetByIdUsuario(id);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { });
+            }
+        
+        }
     }
 
 }
