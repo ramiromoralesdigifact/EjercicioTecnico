@@ -1,9 +1,14 @@
 ﻿using EjercicioTecnico.Middleware;
 using EjercicioTecnico.Models;
 using EjercicioTecnico.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace EjercicioTecnico.Controllers
 {
@@ -14,10 +19,47 @@ namespace EjercicioTecnico.Controllers
         UsuarioValidator validator = new UsuarioValidator();
 
         private readonly UsuarioService _usuarioService;
+        private readonly IConfiguration _configuration; 
 
-        public UsuarioController(UsuarioService usuarioService)
+        public UsuarioController(UsuarioService usuarioService, IConfiguration configuration)
         {
             _usuarioService = usuarioService;
+            _configuration = configuration;
+        }
+
+        [HttpPost("/login")]
+        public IActionResult Login([FromBody] Usuario model)
+        {
+            var token = "";
+
+            if(model.Nombre.Equals("Admin"))  token = GenerateJwtToken(model);
+
+            return Ok(new { Token = token });
+        }
+
+        private string GenerateJwtToken(Usuario user)
+        {
+            var claims = new[]
+            {
+            new Claim(ClaimTypes.Name, user.Nombre)
+        };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+            var expires = DateTime.UtcNow.AddMinutes(30);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = expires,
+                SigningCredentials = creds,
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
 
