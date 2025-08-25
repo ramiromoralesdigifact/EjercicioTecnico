@@ -1,3 +1,5 @@
+using EjercicioTecnico.Config;
+using EjercicioTecnico.Helpers;
 using EjercicioTecnico.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<GenerateJwt>();
+
+var configServices = new ConfigureServices(builder.Configuration);
+configServices.ConfigureJWT(builder.Services);
 
 var app = builder.Build();
 
@@ -19,9 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication(); 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

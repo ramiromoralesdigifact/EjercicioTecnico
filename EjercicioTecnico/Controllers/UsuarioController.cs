@@ -1,9 +1,10 @@
-﻿using EjercicioTecnico.Middleware;
+﻿using EjercicioTecnico.Helpers;
+using EjercicioTecnico.Middleware;
 using EjercicioTecnico.Models;
 using EjercicioTecnico.Services;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation.Results;
 
 namespace EjercicioTecnico.Controllers
 {
@@ -11,6 +12,14 @@ namespace EjercicioTecnico.Controllers
     [Route("/Usuarios")]
     public class UsuarioController : ControllerBase
     {
+
+        private readonly GenerateJwt _tokenGenerator;
+
+        public UsuarioController(GenerateJwt tokenGenerator)
+        {
+            _tokenGenerator = tokenGenerator;
+        }
+
         UsuarioValidator validator = new UsuarioValidator();
 
         private readonly UsuarioService _usuarioService;
